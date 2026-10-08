@@ -4,8 +4,8 @@
 #   Is the zero-tax fallback in InvoiceTotals intended?
 #   EOF
 set -euo pipefail
-# The team's relay. Replace when it's deployed.
-default_url="https://collab.example.com"
+# The team's relay.
+default_url="https://claude-collab.on-forge.com"
 dir="${COLLAB_DIR:-$HOME/.claude/collab}"
 session="${CLAUDE_CODE_SESSION_ID:-none}"
 

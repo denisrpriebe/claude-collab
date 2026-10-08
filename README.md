@@ -38,7 +38,7 @@ your session ──collab ask──▶  relay (droplet)  ──push──▶ Dwi
 ```json
 {
   "extraKnownMarketplaces": {
-    "thinkup": { "source": { "source": "github", "repo": "ThinkUp-Technologies/claude-collab" }, "autoUpdate": true }
+    "thinkup": { "source": { "source": "github", "repo": "denisrpriebe/claude-collab" }, "autoUpdate": true }
   },
   "enabledPlugins": { "collab@thinkup": true },
   "permissions": { "allow": ["Bash(collab *)"] }
@@ -47,7 +47,7 @@ your session ──collab ask──▶  relay (droplet)  ──push──▶ Dwi
 
 **Once per person:** start Claude Code (this installs the plugin), run `/collab:setup <your-token>`, then restart Claude Code so the listener starts. The relay's address is built into the plugin.
 
-The plugin repo is private and gets cloned with your stored GitHub credentials, without prompting. If `/plugin` doesn't list `collab`, check that git can reach the repo.
+This repo is public, so installing needs no GitHub access. If `/plugin` doesn't list `collab` after a restart, run `/plugin` once to check for errors.
 
 ## Verified (2026-10-08, two local sessions)
 
@@ -71,15 +71,15 @@ The plugin repo is private and gets cloned with your stored GitHub credentials, 
 - Plugin monitors sit under the manifest's `experimental` key, and the docs say their shape "may still change". If they break, Claude Code's channels feature is the fallback transport. The relay and CLI stay the same, at the cost of a launch flag.
 - Plugin monitors and `bin/` are Claude Code CLI features, so this plugin doesn't load in claude.ai or Cowork.
 
-## Deploy notes
+## Deploy
 
-- $6 droplet, Node 22+. The relay listens on 127.0.0.1:8790, with Caddy in front for TLS and `flush_interval -1` so the push stream isn't buffered. The firewall only opens 443.
-- Use DNS-only (grey cloud) for the relay's hostname. Cloudflare's proxy buffers long-lived streams, and our zone blocks AI user agents.
-- Env: `COLLAB_TOKENS` (`{"<token>":"denis",...}`), `TZ=America/Chicago`.
+The relay runs on `surge-alpha-test-server` (Forge) as the site `claude-collab.on-forge.com`, next to the gnr site and separate from it.
 
-## Effort
-
-About one session for the relay plus the droplet, Caddy and DNS. About one session for the marketplace repo and plugin polish. Rollout is one Owner paste and three tokens.
+- **Code:** Forge deploys this repo to `/home/forge/claude-collab.on-forge.com`. After a relay change: deploy, then restart the background process.
+- **Process:** a Forge background process runs `node --env-file=.env relay/server.mjs` in that directory. The relay listens on 127.0.0.1:8790 only.
+- **Nginx:** the site's `location /` passes traffic to 127.0.0.1:8790 with `proxy_buffering off` and `proxy_read_timeout 1h`, so the push stream isn't held up or cut off.
+- **Env (`.env` in the site directory):** `COLLAB_TOKENS='{"<token>":"denis",...}'` and `TZ=America/Chicago`. Add or rotate a person by editing it and restarting the process.
+- The `on-forge.com` domain keeps Cloudflare out of the path. Cloudflare's proxy buffers long-lived streams, and our zone blocks AI user agents.
 
 ## Why not…
 
