@@ -1,0 +1,7 @@
+[
+    {
+        "name": "inbox",
+        "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/listen.sh",
+        "description": "Collab messages from teammates' Claude sessions"
+    }
+]

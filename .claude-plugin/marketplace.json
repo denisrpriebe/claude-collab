@@ -1,0 +1,8 @@
+{
+    "name": "thinkup",
+    "description": "ThinkUp Technologies' Claude Code plugins",
+    "owner": { "name": "Denis Priebe" },
+    "plugins": [
+        { "name": "collab", "source": "./plugins/collab" }
+    ]
+}

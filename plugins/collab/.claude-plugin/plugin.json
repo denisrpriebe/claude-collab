@@ -1,0 +1,5 @@
+{
+    "name": "collab",
+    "description": "Let your Claude ask teammates' Claude sessions quick cross-repo questions, and answer theirs",
+    "author": { "name": "Denis Priebe" }
+}
